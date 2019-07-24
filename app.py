@@ -97,5 +97,18 @@ def abort_infer(infer_type):
         
     return "-1"
 
+@app.route('/session/inference/status', methods=['POST'])
+def inference_status():
+    result = {
+        "behaviors": 0,
+        "facial": 0,
+        "movement":0
+    }
+    session_id = request.json['session-id']
+    if session_id in process:
+        result["behaviors"] = 1 if "behaviors" in process[session_id] and process[session_id]['behaviors'].is_aborted == False else 0   
+    return result
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=80)
