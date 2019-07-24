@@ -82,7 +82,7 @@ def inference(infer_type):
             if session_id not in process:
                 process[session_id] = {}
             process[session_id]["behaviors"] = BehaviorDetection()
-            process[session_id]["behaviors"].behaviors_detect(session_id)
+            process[session_id]["behaviors"].behaviors_detect(session_id=session_id)
             return "0"
     return "-1"
 

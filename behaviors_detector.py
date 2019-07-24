@@ -117,7 +117,7 @@ class BehaviorDetection:
                     output_dict['detection_masks'] = output_dict['detection_masks'][0]
         return output_dict
 
-    def behaviors_detect(session_id):
+    def behaviors_detect(self,session_id):
 
         TEST_IMAGE_PATHS = os.listdir("result/"+session_id+"/frames/")
         count = 0
