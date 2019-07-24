@@ -29,7 +29,8 @@ loaded_model = tf.keras.models.load_model(
     "facial_model.tf", custom_objects={'KerasLayer': hub.KerasLayer})
 
 for image in image_input:
-    image = cv2.imread("result/"+session_id+"/frames/"+image)
+    image = cv2.imread("result/" + session_id + "/frames/" + image)
+    print("Read "+image)
     image_origin = image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = faceCascade.detectMultiScale(
