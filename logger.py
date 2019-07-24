@@ -9,7 +9,7 @@ log_files = ["frames", "behaviors", "facial", "movement"]
 
 def write_log(log_type_id, sess_id, progress, total):
     file = open("result/" + sess_id + "/logs/" +
-                log_files[log_type_id] + ".log", "w")
+                log_files[int(log_type_id)] + ".log", "w")
     file.write(total)
     file.write(progress)
     file.close()
