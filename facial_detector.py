@@ -28,9 +28,9 @@ enable_vec = [1, 1, 1, 1, 1, 1, 1]
 loaded_model = tf.keras.models.load_model(
     "facial_model.tf", custom_objects={'KerasLayer': hub.KerasLayer})
 
-for image in image_input:
-    image = cv2.imread("result/" + session_id + "/frames/" + image)
-    print("Read "+image)
+for img_name in image_input:
+    image = cv2.imread("result/" + session_id + "/frames/" + img_name)
+    print("Read "+img_name)
     image_origin = image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = faceCascade.detectMultiScale(
@@ -74,7 +74,8 @@ for image in image_input:
             i += 1
         data[str(k)]['emotion'] = emotion
         k += 1
-    output = open("result/" + session_id + "/facial/" + image + ".json", "w")
+    output = open("result/" + session_id +
+                  "/facial/" + img_name + ".json", "w")
     json.dump(data, output)
     output.close()
-    print("Facial: "+image+" done")
+    print("Facial: "+img_name+" done")
