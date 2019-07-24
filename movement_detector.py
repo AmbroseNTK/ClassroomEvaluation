@@ -7,6 +7,7 @@ import time
 import cv2
 import json
 import logger
+import sys
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -17,17 +18,17 @@ ap.add_argument("-s", "--session-id", help="Session id", default="s0")
 
 args = vars(ap.parse_args())
 
-session_id = args.get("session-id", "s0")
+session_id = sys.argv[1]
 print(session_id)
 
 # if the video argument is None, then we are reading from webcam
-if args.get("video", None) is None:
-    vs = VideoStream(src=0).start()
-    time.sleep(2.0)
+# if args.get("video", None) is None:
+#    vs = VideoStream(src=0).start()
+#    time.sleep(2.0)
 
 # otherwise, we are reading from a video file
-else:
-    vs = cv2.VideoCapture(args["video"])
+# else:
+vs = cv2.VideoCapture(sys.argv[2])
 
 result = {}
 print(int(vs.get(7)))
@@ -103,6 +104,7 @@ while True:
     #key = cv2.waitKey(1) & 0xFF
     logger.write_log(logger.LOG_MOVEMENT, sess_id=session_id,
                      progress=frame_id, total=-1)
+    print("Movement: "+str(frame_id)+" done")
     # if the `q` key is pressed, break from the lop
 
 # cleanup the camera and close any open windows
