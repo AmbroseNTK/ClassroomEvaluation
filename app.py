@@ -19,6 +19,7 @@ def get_session():
 
 
 @app.route('/session/create', methods=['POST'])
+@crossdomain(origin='*')   
 def create_session():
     session_id = request.json['session-id']
     if os.path.exists("result/" + session_id):
