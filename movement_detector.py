@@ -17,7 +17,7 @@ ap.add_argument("-s", "--session-id", help="Session id", default="s0")
 
 args = vars(ap.parse_args())
 
-session_id = args.get("session-id")
+session_id = args.get("session-id", "s0")
 print(session_id)
 
 # if the video argument is None, then we are reading from webcam
