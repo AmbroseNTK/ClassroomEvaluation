@@ -58,13 +58,13 @@ class BehaviorDetection:
         PATH_TO_LABELS, use_display_name=True)
 
 
-    def load_image_into_numpy_array(image):
+    def load_image_into_numpy_array(self, image):
         (im_width, im_height) = image.size
         return np.array(image.getdata()).reshape(
             (im_height, im_width, 3)).astype(np.uint8)
 
 
-    def run_inference_for_single_image(image, graph):
+    def run_inference_for_single_image(self, image, graph):
         with graph.as_default():
             with tf.Session() as sess:
             # Get handles to input and output tensors
