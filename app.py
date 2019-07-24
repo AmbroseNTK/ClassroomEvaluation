@@ -125,10 +125,10 @@ def abort_infer(infer_type):
 
 def check_status(infer_type, session_id):
     if infer_type in process[session_id]:
-        if process[session_id][infer_type].is_aborted == False:
-            return 1
         if process[session_id][infer_type].is_done == True:
             return 2
+        if process[session_id][infer_type].is_aborted == False:
+            return 1  
     return 0
 
 
