@@ -42,7 +42,7 @@ while True:
     # grab the current frame and initialize the occupied/unoccupied
     # text
     frame = vs.read()
-    frame = frame if args.get("video", None) is None else frame[1]
+    frame = frame[1]
     text = "Unoccupied"
 
     # if the frame could not be grabbed, then we have reached the end
@@ -75,7 +75,7 @@ while True:
     # loop over the contours
     for c in cnts:
         # if the contour is too small, ignore it
-        if cv2.contourArea(c) < args["min_area"]:
+        if cv2.contourArea(c) < 500:
             continue
 
         # compute the bounding box for the contour, draw it on the frame,
