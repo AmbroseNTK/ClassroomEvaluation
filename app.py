@@ -2,10 +2,14 @@ from flask import Flask, request, jsonify
 import os
 import shutil
 from framing import video_to_frame
-from behaviors_detector import behaviors_detect
+from behaviors_detector import BehaviorDetection
 
 app = Flask(__name__)
 
+
+process = {
+
+}
 
 @app.route('/session/get')
 def get_session():
@@ -73,7 +77,21 @@ def inference(infer_type):
     session_id = request.json['session-id']
     if os.path.exists('result/' + session_id):
         if infer_type == 'behaviors':
-            behaviors_detect(session_id)
+            shutil.rmtree('result/' + session_id + '/behaviors')
+            os.mkdir('result/'+session_id+'/behaviors')
+            process[session_id]["behaviors"] = BehaviorDetection()
+            process[session_id]["behaviors"].behaviors_detect(session_id)
+            return "0"
+    return "-1"
+
+@app.route('/session/inference/abort/<infer_type>', methods=['POST'])
+def abort_infer(infer_type):
+    session_id = request.json['session-id']
+    if os.path.exists('result/' + session_id):
+        if infer_type == 'behaviors':
+            if "behaviors" in process[session_id]:
+                del process[session_id]["behaviors"]
+        
     return "-1"
 
 if __name__ == '__main__':
