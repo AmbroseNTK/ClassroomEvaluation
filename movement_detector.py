@@ -104,8 +104,7 @@ while True:
     logger.write_log(logger.LOG_MOVEMENT, sess_id=session_id,
                      progress=frame_id, total=-1)
     # if the `q` key is pressed, break from the lop
-    if key == ord("q"):
-        break
+
 # cleanup the camera and close any open windows
 vs.stop() if args.get("video", None) is None else vs.release()
 # cv2.destroyAllWindows()
