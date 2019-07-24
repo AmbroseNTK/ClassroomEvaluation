@@ -45,6 +45,7 @@ class BehaviorDetection:
 
     result_folder = ["frames", "behaviors", "facial", "movement", "logs"]
 
+    is_aborted = False
 
     detection_graph = tf.Graph()
     with detection_graph.as_default():
@@ -123,6 +124,10 @@ class BehaviorDetection:
         count = 0
 
         for image_path in TEST_IMAGE_PATHS:
+
+            if self.is_aborted:
+                return 0
+
             image = Image.open("result/"+session_id+"/frames/"+image_path)
     # the array based representation of the image will be used later in order to prepare the
     # result image with boxes and labels on it.

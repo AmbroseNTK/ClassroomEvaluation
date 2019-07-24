@@ -92,7 +92,8 @@ def abort_infer(infer_type):
     if os.path.exists('result/' + session_id):
         if infer_type == 'behaviors':
             if "behaviors" in process[session_id]:
-                del process[session_id]["behaviors"]
+                process[session_id]["behaviors"].is_abort = True
+                return "0"
         
     return "-1"
 
