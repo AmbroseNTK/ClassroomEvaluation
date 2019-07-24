@@ -78,7 +78,9 @@ def inference(infer_type):
     if os.path.exists('result/' + session_id):
         if infer_type == 'behaviors':
             shutil.rmtree('result/' + session_id + '/behaviors')
-            os.mkdir('result/'+session_id+'/behaviors')
+            os.mkdir('result/' + session_id + '/behaviors')
+            if session_id not in process:
+                process[session_id] = {}
             process[session_id]["behaviors"] = BehaviorDetection()
             process[session_id]["behaviors"].behaviors_detect(session_id)
             return "0"
