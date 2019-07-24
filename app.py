@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
+
 import os
 import shutil
 from framing import video_to_frame
@@ -7,7 +9,8 @@ from facial_detector import FacialDetection
 from movement_detector import MovementDetection
 
 app = Flask(__name__)
-
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 process = {
 
@@ -19,7 +22,7 @@ def get_session():
 
 
 @app.route('/session/create', methods=['POST'])
-@crossdomain(origin='*')   
+@cross_origin() 
 def create_session():
     session_id = request.json['session-id']
     if os.path.exists("result/" + session_id):
