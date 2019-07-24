@@ -131,7 +131,7 @@ class BehaviorDetection:
             image_np_expanded = np.expand_dims(image_np, axis=0)
     # Actual detection.
             output_dict = self.run_inference_for_single_image(
-                image_np_expanded, detection_graph)
+                image_np_expanded, self.detection_graph)
 
             obj = {
                 "boxes": output_dict['detection_boxes'].tolist(),
