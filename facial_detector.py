@@ -7,6 +7,7 @@ import tensorflow_hub as hub
 from tensorflow.keras import layers
 import logger
 import sys
+import numpy as np
 
 #ap = argparse.ArgumentParser()
 #ap.add_argument("-s", "--session-id")
