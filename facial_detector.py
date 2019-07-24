@@ -73,7 +73,7 @@ for image in image_input:
             i += 1
         data[str(k)]['emotion'] = emotion
         k += 1
-    output = open("result/" + session_id + "/facial/" + image + ".json")
+    output = open("result/" + session_id + "/facial/" + image + ".json", "w")
     json.dump(data, output)
     output.close()
     print("Facial: "+image+" done")
