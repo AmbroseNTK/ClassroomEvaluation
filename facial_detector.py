@@ -6,13 +6,14 @@ import tensorflow as tf
 import tensorflow_hub as hub
 from tensorflow.keras import layers
 import logger
+import sys
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-s", "--session-id")
+#ap = argparse.ArgumentParser()
+#ap.add_argument("-s", "--session-id")
 
-args = vars(ap.parse_args())
+#args = vars(ap.parse_args())
 
-session_id = args.get("session-id")
+session_id = sys.argv[1]
 
 image_input = os.listdir("result/"+session_id+"/frames")
 cascade_input = "opencv/data/haarcascades/haarcascade_frontalface_default.xml"
@@ -24,7 +25,7 @@ label_map = ["Angry", "Disgust", "Fear",
 enable_vec = [1, 1, 1, 1, 1, 1, 1]
 
 loaded_model = tf.keras.models.load_model(
-    "models/facial_model.tf", custom_objects={'KerasLayer': hub.KerasLayer})
+    "facial_model.tf", custom_objects={'KerasLayer': hub.KerasLayer})
 
 for image in image_input:
     image = cv2.imread("result/"+session_id+"/frames/"+image)
