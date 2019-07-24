@@ -97,8 +97,9 @@ while True:
 #    cv2.imshow("Security Feed", frame)
 #    cv2.imshow("Thresh", thresh)
 #    cv2.imshow("Frame Delta", frameDelta)
-    key = cv2.waitKey(1) & 0xFF
-    logger.write_log(logger.LOG_MOVEMENT,)
+    #key = cv2.waitKey(1) & 0xFF
+    logger.write_log(logger.LOG_MOVEMENT, sess_id=args.get(
+        "session-id"), progress=frame_id, total=-1)
     # if the `q` key is pressed, break from the lop
     if key == ord("q"):
         break
