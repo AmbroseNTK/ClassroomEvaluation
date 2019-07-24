@@ -38,37 +38,11 @@ PATH_TO_FROZEN_GRAPH = MODEL_NAME + \
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = "labelmap.pbtxt"
 
-session_id = sys.argv[1]
+session_id = "s0" # sys.argv[1]
 
-input_dir = sys.argv[2]
+input_dir = "video.mp4" # sys.argv[2]
 
 result_folder = ["frames", "behaviors", "facial", "movement", "logs"]
-
-if os.path.exists("result/" + session_id):
-    shutil.rmtree("result/" + session_id)
-
-os.mkdir("result/" + session_id)
-for fol in result_folder:
-    os.mkdir("result/"+session_id+"/"+fol)
-
-
-def video_to_frame(dir, fileName, frameRate):
-    vidcap = cv2.VideoCapture(dir)
-    success, image = vidcap.read()
-    count = 0
-    success = True
-    while success:
-        if(count % frameRate == 0):
-            cv2.imwrite("result/"+session_id+"/frames/"+session_id+"_"+str(count)+".jpg",
-                        image)  # save frame as JPEG file
-            print('Save frame: ', count, ': ', success)
-        success, image = vidcap.read()
-        #print('Read a new frame: ', count, ': ', success)
-        count += 1
-        logger.write_log(logger.LOG_FRAMING, session_id, count, -1)
-
-
-video_to_frame(input_dir, "test", 1)
 
 
 detection_graph = tf.Graph()
@@ -145,30 +119,32 @@ def run_inference_for_single_image(image, graph):
 
 print("Behaviors detection")
 
-TEST_IMAGE_PATHS = os.listdir("result/"+session_id+"/frames/")
-count = 0
+def behaviors_detect(session_id):
 
-for image_path in TEST_IMAGE_PATHS:
-    image = Image.open("result/"+session_id+"/frames/"+image_path)
+    TEST_IMAGE_PATHS = os.listdir("result/"+session_id+"/frames/")
+    count = 0
+
+    for image_path in TEST_IMAGE_PATHS:
+        image = Image.open("result/"+session_id+"/frames/"+image_path)
     # the array based representation of the image will be used later in order to prepare the
     # result image with boxes and labels on it.
-    image_np = load_image_into_numpy_array(image)
+        image_np = load_image_into_numpy_array(image)
     # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-    image_np_expanded = np.expand_dims(image_np, axis=0)
+        image_np_expanded = np.expand_dims(image_np, axis=0)
     # Actual detection.
-    output_dict = run_inference_for_single_image(
-        image_np_expanded, detection_graph)
+        output_dict = run_inference_for_single_image(
+            image_np_expanded, detection_graph)
 
-    obj = {
-        "boxes": output_dict['detection_boxes'].tolist(),
-        "classes": output_dict['detection_classes'].tolist(),
-        "scores": output_dict['detection_scores'].tolist()
-    }
+        obj = {
+            "boxes": output_dict['detection_boxes'].tolist(),
+            "classes": output_dict['detection_classes'].tolist(),
+            "scores": output_dict['detection_scores'].tolist()
+        }
 
-    result = open("result/"+session_id+"/behaviors/"+image_path+'.json', 'w')
-    json.dump(obj, result)
-    result.close()
-    print("Behaviors: " + image_path + " done")
-    count += 1
-    logger.write_log(logger.LOG_BEHAVIOR, session_id,
-                     count, len(TEST_IMAGE_PATHS))
+        result = open("result/"+session_id+"/behaviors/"+image_path+'.json', 'w')
+        json.dump(obj, result)
+        result.close()
+        print("Behaviors: " + image_path + " done")
+        count += 1
+        #logger.write_log(logger.LOG_BEHAVIOR, session_id,
+        #             count, len(TEST_IMAGE_PATHS))
