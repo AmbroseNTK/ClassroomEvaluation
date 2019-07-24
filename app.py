@@ -4,6 +4,7 @@ import shutil
 from framing import video_to_frame
 from behaviors_detector import BehaviorDetection
 from facial_detector import FacialDetection
+from movement_detector import MovementDetection
 
 app = Flask(__name__)
 
@@ -93,6 +94,14 @@ def inference(infer_type):
             process[session_id]["facial"] = FacialDetection()
             process[session_id]["facial"].facial_detect(session_id=session_id)
             return "0"
+        if infer_type == 'movement':
+            shutil.rmtree('result/' + session_id + '/movement')
+            os.mkdir('result/' + session_id + '/movement')
+            if session_id not in process:
+                process[session_id] = {}
+            process[session_id]["movement"] = MovementDetection()
+            process[session_id]["movement"].movement_detect(session_id=session_id)
+            return "0"
     return "-1"
 
 @app.route('/session/inference/abort/<infer_type>', methods=['POST'])
@@ -103,8 +112,13 @@ def abort_infer(infer_type):
             if "behaviors" in process[session_id]:
                 process[session_id]["behaviors"].is_aborted = True
                 return "0"
+        if infer_type == 'facial':
             if "facial" in process[session_id]:
                 process[session_id]["facial"].is_aborted = True
+                return "0"
+        if infer_type == 'movement':
+            if "movement" in process[session_id]:
+                process[session_id]["movement"].is_aborted = True
                 return "0"
         
     return "-1"
@@ -120,7 +134,8 @@ def inference_status():
     if session_id in process:
         result["behaviors"] = 1 if "behaviors" in process[session_id] and process[session_id]['behaviors'].is_aborted == False else 0   
         result["facial"] = 1 if "facial" in process[session_id] and process[session_id]['facial'].is_aborted == False else 0   
-    
+        result["movement"] = 1 if "movement" in process[session_id] and process[session_id]['movement'].is_aborted == False else 0   
+        
     return result
 
 

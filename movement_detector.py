@@ -18,8 +18,8 @@ import sys
 
 #args = vars(ap.parse_args())
 
-session_id = sys.argv[1]
-print(session_id)
+#session_id = sys.argv[1]
+#print(session_id)
 
 # if the video argument is None, then we are reading from webcam
 # if args.get("video", None) is None:
@@ -28,89 +28,95 @@ print(session_id)
 
 # otherwise, we are reading from a video file
 # else:
-vs = cv2.VideoCapture(sys.argv[2])
+class MovementDetection:
 
-result = {}
-print(int(vs.get(7)))
+    is_aborted = False
+
+    def movement_detect(self, session_id):
+        vs = cv2.VideoCapture("result/"+session_id+"/video.mp4")
+
+        result = {}
+        print(int(vs.get(7)))
 
 # initialize the first frame in the video stream
-firstFrame = None
+        firstFrame = None
 
-frame_id = 0
+        frame_id = 0
 # loop over the frames of the video
-while True:
+        while True:
     # grab the current frame and initialize the occupied/unoccupied
     # text
-    frame = vs.read()
-    frame = frame[1]
-    text = "Unoccupied"
+            if self.is_aborted:
+                return 0
+            
+            frame = vs.read()
+            frame = frame[1]
+            text = "Unoccupied"
 
     # if the frame could not be grabbed, then we have reached the end
     # of the video
-    if frame is None:
-        break
+            if frame is None:
+                break
 
     # resize the frame, convert it to grayscale, and blur it
-    frame = imutils.resize(frame, width=500)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (21, 21), 0)
+            frame = imutils.resize(frame, width=500)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
     # if the first frame is None, initialize it
-    if firstFrame is None:
-        firstFrame = gray
-        continue
+            if firstFrame is None:
+                firstFrame = gray
+                continue
     # compute the absolute difference between the current frame and
     # first frame
-    frameDelta = cv2.absdiff(firstFrame, gray)
-    thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
+            frameDelta = cv2.absdiff(firstFrame, gray)
+            thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
     # dilate the thresholded image to fill in holes, then find contours
     # on thresholded image
-    thresh = cv2.dilate(thresh, None, iterations=2)
-    cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+            thresh = cv2.dilate(thresh, None, iterations=2)
+            cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
                             cv2.CHAIN_APPROX_SIMPLE)
-    cnts = imutils.grab_contours(cnts)
-    frame_result = {}
-    contour_id = 0
+            cnts = imutils.grab_contours(cnts)
+            frame_result = {}
+            contour_id = 0
     # loop over the contours
-    for c in cnts:
+            for c in cnts:
         # if the contour is too small, ignore it
-        if cv2.contourArea(c) < 500:
-            continue
+                if cv2.contourArea(c) < 500:
+                    continue
 
         # compute the bounding box for the contour, draw it on the frame,
         # and update the text
-        (x, y, w, h) = cv2.boundingRect(c)
-        frame_result["c" + str(contour_id)] = {
-            "x": x,
-            "y": y,
-            "w": w,
-            "h": h
-        }
-        contour_id += 1
+                (x, y, w, h) = cv2.boundingRect(c)
+                frame_result["c" + str(contour_id)] = {
+                    "x": x,
+                    "y": y,
+                    "w": w,
+                    "h": h
+                }
+                contour_id += 1
 #        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        text = "Occupied"
+                text = "Occupied"
     # draw the text and timestamp on the frame
 #    cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
 #                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 #    cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
 #                (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-    result["f"+str(frame_id)] = frame_result
-    frame_id += 1
+            result["f"+str(frame_id)] = frame_result
+            frame_id += 1
     # show the frame and record if the user presses a key
 #    cv2.imshow("Security Feed", frame)
 #    cv2.imshow("Thresh", thresh)
 #    cv2.imshow("Frame Delta", frameDelta)
     #key = cv2.waitKey(1) & 0xFF
-    logger.write_log(logger.LOG_MOVEMENT, sess_id=session_id,
-                     progress=frame_id, total=-1)
-    print("Movement: "+str(frame_id)+" done")
+            print("Movement: "+str(frame_id)+" done")
     # if the `q` key is pressed, break from the lop
 
 # cleanup the camera and close any open windows
 #vs.stop() if args.get("video", None) is None else vs.release()
 # cv2.destroyAllWindows()
 
-output = open('result/'+session_id+'/movement/result.json', 'w')
-json.dump(result, output)
-output.close()
+        output = open('result/'+session_id+'/movement/result.json', 'w')
+        json.dump(result, output)
+        output.close()
