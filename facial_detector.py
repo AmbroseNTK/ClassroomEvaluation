@@ -19,6 +19,7 @@ import numpy as np
 class FacialDetection:
 
     is_aborted = False
+    is_done = False
 
     def facial_detect(self, session_id):
         image_input = os.listdir("result/"+session_id+"/frames")
@@ -86,4 +87,5 @@ class FacialDetection:
                       "/facial/" + img_name + ".json", "w")
             json.dump(data, output)
             output.close()
-            print("Facial: "+img_name+" done")
+            print("Facial: " + img_name + " done")
+        self.is_done = True

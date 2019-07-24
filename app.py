@@ -123,6 +123,15 @@ def abort_infer(infer_type):
         
     return "-1"
 
+def check_status(infer_type, session_id):
+    if infer_type in process[session_id]:
+        if process[session_id][infer_type].is_aborted == False:
+            return 1
+        elif process[session_id][infer_type].is_done == True:
+            return 2
+    return 0
+
+
 @app.route('/session/inference/status', methods=['POST'])
 def inference_status():
     result = {
@@ -131,11 +140,10 @@ def inference_status():
         "movement":0
     }
     session_id = request.json['session-id']
+    infer_list = ["behaviors","facial","movement"]
     if session_id in process:
-        result["behaviors"] = 1 if "behaviors" in process[session_id] and process[session_id]['behaviors'].is_aborted == False else 0   
-        result["facial"] = 1 if "facial" in process[session_id] and process[session_id]['facial'].is_aborted == False else 0   
-        result["movement"] = 1 if "movement" in process[session_id] and process[session_id]['movement'].is_aborted == False else 0   
-        
+        for infer_type in infer_list:
+            result[infer_type] = check_status(infer_type,session_id)
     return result
 
 

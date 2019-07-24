@@ -46,6 +46,7 @@ class BehaviorDetection:
     result_folder = ["frames", "behaviors", "facial", "movement", "logs"]
 
     is_aborted = False
+    is_done = False
 
     detection_graph = tf.Graph()
     with detection_graph.as_default():
@@ -149,3 +150,4 @@ class BehaviorDetection:
             count += 1
         #logger.write_log(logger.LOG_BEHAVIOR, session_id,
         #             count, len(TEST_IMAGE_PATHS))
+        self.is_done = True

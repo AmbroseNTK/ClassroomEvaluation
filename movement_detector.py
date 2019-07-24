@@ -31,6 +31,7 @@ import sys
 class MovementDetection:
 
     is_aborted = False
+    is_done = False
 
     def movement_detect(self, session_id):
         vs = cv2.VideoCapture("result/"+session_id+"/video.mp4")
@@ -120,3 +121,4 @@ class MovementDetection:
         output = open('result/'+session_id+'/movement/result.json', 'w')
         json.dump(result, output)
         output.close()
+        self.is_done = True
