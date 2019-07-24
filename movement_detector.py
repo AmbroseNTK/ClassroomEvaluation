@@ -10,13 +10,13 @@ import logger
 import sys
 
 # construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int,
-                default=500, help="minimum area size")
-ap.add_argument("-s", "--session-id", help="Session id", default="s0")
+#ap = argparse.ArgumentParser()
+#ap.add_argument("-v", "--video", help="path to the video file")
+# ap.add_argument("-a", "--min-area", type=int,
+#                default=500, help="minimum area size")
+#ap.add_argument("-s", "--session-id", help="Session id", default="s0")
 
-args = vars(ap.parse_args())
+#args = vars(ap.parse_args())
 
 session_id = sys.argv[1]
 print(session_id)
@@ -108,7 +108,7 @@ while True:
     # if the `q` key is pressed, break from the lop
 
 # cleanup the camera and close any open windows
-vs.stop() if args.get("video", None) is None else vs.release()
+#vs.stop() if args.get("video", None) is None else vs.release()
 # cv2.destroyAllWindows()
 
 output = open('result/'+session_id+'/movement/result.json', 'w')
