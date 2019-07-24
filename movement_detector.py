@@ -17,6 +17,8 @@ ap.add_argument("-s", "--session-id", help="Session id", default="s0")
 
 args = vars(ap.parse_args())
 
+session_id = args.get("session-id")
+
 # if the video argument is None, then we are reading from webcam
 if args.get("video", None) is None:
     vs = VideoStream(src=0).start()
@@ -98,8 +100,8 @@ while True:
 #    cv2.imshow("Thresh", thresh)
 #    cv2.imshow("Frame Delta", frameDelta)
     #key = cv2.waitKey(1) & 0xFF
-    logger.write_log(logger.LOG_MOVEMENT, sess_id=args.get(
-        "session-id"), progress=frame_id, total=-1)
+    logger.write_log(logger.LOG_MOVEMENT, sess_id=session_id,
+                     progress=frame_id, total=-1)
     # if the `q` key is pressed, break from the lop
     if key == ord("q"):
         break
@@ -107,6 +109,6 @@ while True:
 vs.stop() if args.get("video", None) is None else vs.release()
 # cv2.destroyAllWindows()
 
-output = open('result/'+args.get("session-id")+'/movement/result.json', 'w')
+output = open('result/'+session_id+'/movement/result.json', 'w')
 json.dump(result, output)
 output.close()
