@@ -17,6 +17,7 @@ process = {
 }
 
 @app.route('/session/get')
+@cross_origin()
 def get_session():
     return jsonify(os.listdir("result/"))
 
@@ -35,6 +36,7 @@ def create_session():
 
 
 @app.route('/session/delete', methods=['POST'])
+@cross_origin()
 def delete_session():
     session_id = request.json['session-id']
     if os.path.exists("result/" + session_id):
@@ -44,6 +46,7 @@ def delete_session():
 
 
 @app.route('/session/status', methods=['POST'])
+@cross_origin()
 def get_status():
     session_id = request.json['session-id']
     if os.path.exists('result/' + session_id):
@@ -63,6 +66,7 @@ def get_status():
 
 
 @app.route('/session/<session_id>/upload/', methods=['POST'])
+@cross_origin()
 def upload_file(session_id):
     print(session_id)
     if os.path.exists('result/' + session_id):
@@ -79,6 +83,7 @@ def upload_file(session_id):
     return "-1"
 
 @app.route('/session/inference/<infer_type>', methods=['POST'])
+@cross_origin()
 def inference(infer_type):
     session_id = request.json['session-id']
     if os.path.exists('result/' + session_id):
@@ -109,6 +114,7 @@ def inference(infer_type):
     return "-1"
 
 @app.route('/session/inference/abort/<infer_type>', methods=['POST'])
+@cross_origin()
 def abort_infer(infer_type):
     session_id = request.json['session-id']
     if os.path.exists('result/' + session_id):
@@ -137,6 +143,7 @@ def check_status(infer_type, session_id):
 
 
 @app.route('/session/inference/status', methods=['POST'])
+@cross_origin()
 def inference_status():
     result = {
         "behaviors": 0,
