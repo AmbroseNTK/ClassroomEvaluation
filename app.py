@@ -179,7 +179,7 @@ def fetch_infer_status():
 def get_result():
     session_id = request.json['session-id']
     if os.path.exists('result/' + session_id):
-        movement_file = open('result' + session_id + '/movement/result.json', 'r')
+        movement_file = open('result/' + session_id + '/movement/result.json', 'r')
         data = {"movement":json.loads(movement_file)}
         return jsonify(data)
     return "-1"
