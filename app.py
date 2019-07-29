@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO,send,emit
 
 import os
 import shutil
@@ -11,6 +12,7 @@ from movement_detector import MovementDetection
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+socketio = SocketIO(app)
 
 process = {
 
@@ -44,11 +46,8 @@ def delete_session():
         return "0"
     return "-1"
 
-
-@app.route('/session/status', methods=['POST'])
-@cross_origin()
-def get_status():
-    session_id = request.json['session-id']
+def get_status_of(sess_id, on_event=False):
+    session_id = sess_id
     if os.path.exists('result/' + session_id):
         total_frame = len(os.listdir('result/' + session_id + "/frames"))
         behavior_result = len(os.listdir(
@@ -56,13 +55,22 @@ def get_status():
         facial_result = len(os.listdir('result/' + session_id + '/facial'))
         movement_done = os.path.exists(
             'result/' + session_id + '/movement/result.json')
-        return jsonify({
+        data = {
             "total_frame": total_frame,
             "behavior_result": behavior_result,
             "facial_result": facial_result,
             "movement_done": movement_done
-        })
+        }
+        if on_event:
+            send(data,json=True)
+        return jsonify(data)
     return "-1"
+
+@app.route('/session/status', methods=['POST'])
+@cross_origin()
+def get_status():
+    session_id = request.json['session-id']
+    return get_status_of(session_id)
 
 
 @app.route('/session/<session_id>/upload/', methods=['POST'])
@@ -158,5 +166,13 @@ def inference_status():
     return result
 
 
+
+@app.route('/session/inference/fetch', methods=['POST'])
+@cross_origin()
+def fetch_infer_status():
+    session_id = request.json['session-id']
+    socketio.on_event(session_id + '->infer', get_status_of(session_id,True));
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=80)
+    app.run(host='0.0.0.0', port=80)
+    socketio.run(app)
