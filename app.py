@@ -8,6 +8,7 @@ from framing import video_to_frame
 from behaviors_detector import BehaviorDetection
 from facial_detector import FacialDetection
 from movement_detector import MovementDetection
+import json
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -172,6 +173,16 @@ def inference_status():
 def fetch_infer_status():
     session_id = request.json['session-id']
     socketio.on_event(session_id + '->infer', get_status_of(session_id,True));
+
+@app.route('/session/result', methods=['POST'])
+@cross_origin()
+def get_result():
+    session_id = request.json['session-id']
+    if os.path.exists('result/' + session_id):
+        movement_file = open('result' + session_id + '/movement/result.json', 'r')
+        data = {"movement":json.loads(movement_file)}
+        return jsonify(data)
+    return "-1"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
