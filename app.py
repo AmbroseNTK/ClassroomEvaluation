@@ -180,7 +180,15 @@ def get_result():
     session_id = request.json['session-id']
     if os.path.exists('result/' + session_id):
         movement_file = open('result/' + session_id + '/movement/result.json', 'r')
-        data = {"movement":json.loads(movement_file.read())}
+        data = {"movement": json.loads(movement_file.read())}
+        movement_file.close()
+
+        behaviors_path = os.listdir('result/' + session_id + '/behaviors')
+        behaviors_data = {}
+        for bpath in behaviors_path:
+            behaviors_file = open('result/' + session_id + '/behaviors/' + bpath)
+            behaviors_data[bpath.split('.')[0].split('_')[1]] = json.loads(behaviors_file.read())
+        data["behaviors":behaviors_data]
         return jsonify(data)
     return "-1"
 
