@@ -78,7 +78,7 @@ class FacialDetection:
                 i = 0
                 emotion = {}
                 for pred in preds[0]:
-                    emotion[label_map[i]] = json.dumps(str(pred))
+                    emotion[label_map[i]] = str(pred)
             #print("%s:%.4f" % (label_map[i], pred))
                     i += 1
                 data[str(k)]['emotion'] = emotion
