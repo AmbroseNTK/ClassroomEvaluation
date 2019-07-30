@@ -188,7 +188,7 @@ def get_result():
         for bpath in behaviors_path:
             behaviors_file = open('result/' + session_id + '/behaviors/' + bpath)
             behaviors_data[bpath.split('.')[0].split('_')[1]] = json.loads(behaviors_file.read())
-        data["behaviors":behaviors_data]
+        data["behaviors"]=behaviors_data
         return jsonify(data)
     return "-1"
 
