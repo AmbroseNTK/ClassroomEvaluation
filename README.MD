@@ -28,6 +28,16 @@
 
 ## 1. Introduction <a name="intro"></a>
 
+Nowaday, Vietnamese education still has some problems. One of them is how they can make sure the quality of teaching? How do the students digest new knowledge which is obtained from their teacher? This project provides a solution for above problem using Machine Learning techincal.
+
+In a nut shell, **Classroom Evaluation** means using video record from classes and analyze them with ML/DL model to get new information.
+
+**The definition of "Evaluation"**
+
+    Detect activities, emotion and movement of student in their classroom during course via video recording, then, take some actions in other to improve peformance of studying and teaching process
+
+The 2nd University Machine Learning Camp at Jeju, South Korea is a good chance for me to research and implement this project.
+
 ---
 ## 2. Plan <a name="plan"></a>
 
