@@ -34,13 +34,25 @@ In a nut shell, **Classroom Evaluation** means using video record from classes a
 
 **The definition of "Evaluation"**
 
-    Detect activities, emotion and movement of student in their classroom during course via video recording, then, take some actions in other to improve peformance of studying and teaching process
+> Detect activities, emotion and movement of student in their classroom during course via video recording, then, take some actions in other to improve peformance of studying and teaching process.
 
 The 2nd University Machine Learning Camp at Jeju, South Korea is a good chance for me to research and implement this project.
 
 ---
 ## 2. Plan <a name="plan"></a>
 
+During 3 weeks in the camp, I have planned what I have to do so that I get a runnable demo. After that, I can work on it to get the better result.
+
+Here is my weekly plan:
+
+Sun | Mon | Tue | Wed | Thu | Fri | Sat
+----|-----|-----|-----|-----|-----|----
+**Jul 14** | **Jul 15** | **Jul 16** | **Jul 17** | **Jul 18** | **Jul 19** | **Jul 20**
+Check-in | Data preparation for facial expression detection | --- | Train Student's behaviors detection model | ---|Change hyperparameters and re-train| Fine-tune behaviors model |
+**Jul 21** | **Jul 22** | **Jul 23** | **Jul 24** | **Jul 25** | **Jul 26** | **Jul 27**
+Relax | Make **fer** dataset preprocessing script | Try to train with simple CNN architecture | Using Pretrained CNN (Inception v3) model from Keras - TensorFlow | Apply transfer learning with pretrained model from TensorFlow Hub | Try with difference hyperparameters | Setup TensorFlow environment on Google Cloud Platform (Compute Engine)
+**Jul 28** | **Jul 29** | **Jul 30** | **Jul 31** | **Aug 1** | **Aug 2** | **Aug 3**
+ Relax | Build Flask server to serve models via APIs | Deploy models and server to VM on GCP | Create Web App to consume these model |Final Presentation| Free time | Check-out | @home
 ---
 ## 3. Data Preparation <a name="data"></a>
 
