@@ -143,8 +143,20 @@ class BehaviorDetection:
                 "scores": output_dict['detection_scores'].tolist()
             }
 
+            filtered = {
+                "classes": [],
+                "scores":[]
+            }
+
+            for i in range(len(obj["classes"])):
+                if obj["scores"][i] > 0.7:
+                    filtered["scores"].append(obj["scores"][i])
+                    filtered["classes"].append(obj["classes"][i])
+                else:
+                    break
+
             result = open("result/"+session_id+"/behaviors/"+image_path+'.json', 'w')
-            json.dump(obj, result)
+            json.dump(filtered, result)
             result.close()
             print("Behaviors: " + image_path + " done")
             count += 1
